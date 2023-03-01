@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const posts = require("./routes/posts");
 
 const app = express();
 
@@ -18,8 +19,12 @@ mongoose
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
 // Routes
-app.get("/", (req, res) => {
-  res.send("Hello World Blog!");
+app.use("/api/posts", posts);
+
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
 });
 
 // Listen
